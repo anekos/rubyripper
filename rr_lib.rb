@@ -1467,6 +1467,7 @@ attr_reader :status, :artist, :album, :year, :genre
 		end
 		
 		dirName = fileFilter(dirName, true)
+		dirName.force_encoding("UTF-8")
 		return File.expand_path(File.join(@settings['basedir'], dirName))
 	end
 
@@ -1652,14 +1653,15 @@ attr_reader :status, :artist, :album, :year, :genre
 		if var.respond_to?(:encoding)
 			# prepare for byte substitutions
 			enc = var.encoding
-			var.force_encoding("ASCII-8BIT")
+			# var.force_encoding("ASCII-8BIT")
+			var.force_encoding(enc)
 		end
 
 		# replace utf-8 single quotes with latin single quote 
-		var.gsub!(/\342\200\230|\342\200\231/, "'") 
+		# var.gsub!(/\342\200\230|\342\200\231/, "'") 
 		
 		# replace utf-8 double quotes with latin double quote
-		var.gsub!(/\342\200\234|\342\200\235/, '"') 
+		# var.gsub!(/\342\200\234|\342\200\235/, '"') 
 
 		if var.respond_to?(:encoding)
 			# restore the old encoding
@@ -1722,7 +1724,7 @@ attr_reader :status, :artist, :album, :year, :genre
 		if track == "image"
 			return File.join(@dir[codec], @image[codec])		
 		else
-			return File.join(@dir[codec], @file[codec][track])
+			return File.join(@dir[codec].force_encoding("UTF-8"), @file[codec][track].force_encoding("UTF-8"))
 		end	
 	end
 
